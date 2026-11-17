@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#06090f" />
+<title>HELL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&family=Metal+Mania&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  @font-face{
+    font-family:'Horror Vision';
+    src:url(assets/HorrorVision.ttf) format('truetype');
+    font-display:swap;
+  }
+  body{
+    background:#06090f;
+    overflow:hidden;
+    font-family:'Quicksand','Segoe UI',sans-serif;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+  }
+
+  /* ماوس على شكل فراشة بسهم صغير، أحمر غامق */
+  body, body *{
+    cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><path d='M26 24C23.5 16.5 17 12.5 14.5 15.2c-2.3 2.6 2.3 8.4 11.5 8.8z' fill='%2396100f' stroke='%23b31515' stroke-width='.6'/><path d='M28 24c2.5-7.5 9-11.5 11.5-8.8 2.3 2.6-2.3 8.4-11.5 8.8z' fill='%23780b0b' stroke='%23b31515' stroke-width='.6'/><path d='M26 27.5c-6.5 1-11 4.8-9.4 7.6 1.5 2.8 7.8.7 9.4-7.6z' fill='%23780b0b' stroke='%23b31515' stroke-width='.6'/><path d='M28 27.5c6.5 1 11 4.8 9.4 7.6-1.5 2.8-7.8.7-9.4-7.6z' fill='%2396100f' stroke='%23b31515' stroke-width='.6'/><path d='M26.6 21.9c-.8-2.7-2.6-4.1-4.3-4.7M27.4 21.9c.8-2.7 2.6-4.1 4.3-4.7' fill='none' stroke='%23b31515' stroke-width='.8' stroke-linecap='round'/><ellipse cx='27' cy='27' rx='1.5' ry='5.6' fill='%233a0404' stroke='%23b31515' stroke-width='.5'/><path d='M2 2L2 13.5L5.2 10.6L7.6 16L10.1 14.9L7.8 9.8L12.4 9.6Z' fill='%238c0d0d' stroke='%23c02a1d' stroke-width='1' stroke-linejoin='round'/></svg>") 2 2, auto;
+  }
+
+  /* صورة البنت نفسها مليانة الشاشة */
+  .stage{
+    position:fixed;inset:0;overflow:hidden;
+    display:grid;place-items:center;
+    transition:transform .95s cubic-bezier(.65,0,.9,.5), filter .95s ease;
+    transform-origin:50% 46%;
+  }
+  .scene{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;
+    filter:saturate(1.03) brightness(.9);
+  }
+  .tint{
+    position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(70% 55% at 50% 46%, rgba(0,0,0,.30), transparent 72%),
+      radial-gradient(130% 105% at 50% 50%, transparent 42%, rgba(4,2,8,.82) 100%);
+  }
+
+  /* نقط نيون أحمر غامق طالعة من تحت لفوق زي التلج على الصورة */
+  .sparks{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+  .sparks i{
+    position:absolute;bottom:-10px;
+    border-radius:50%;
+    background:#a31212;
+    box-shadow:0 0 6px rgba(200,0,0,.9), 0 0 16px rgba(140,0,0,.8);
+    opacity:0;
+    animation:rise-snow linear infinite;
+  }
+  @keyframes rise-snow{
+    0%{transform:translate(0,0) scale(.7);opacity:0}
+    10%{opacity:1}
+    85%{opacity:.85}
+    100%{transform:translate(var(--dx,20px), -110vh) scale(1.05);opacity:0}
+  }
+
+
+  /* HELL + زرار الدخول فوق الصورة */
+  .hero{
+    position:relative;z-index:2;
+    display:flex;flex-direction:column;align-items:center;
+    gap:clamp(16px, 3.2vh, 34px);
+    padding:20px;text-align:center;
+  }
+
+  .hell{
+    display:inline-block;
+    font-family:'Horror Vision','Metal Mania','Quicksand',cursive;
+    font-size:clamp(96px, 20vw, 240px);
+    line-height:1;
+    letter-spacing:.05em;
+    min-height:1em;
+    color:#c01818;
+    -webkit-text-stroke:.6px rgba(96,0,0,.7);
+    text-shadow:
+      0 0 3px rgba(175,0,0,.85),
+      0 0 14px rgba(150,0,0,.9),
+      0 0 40px rgba(120,0,0,.9),
+      0 0 95px rgba(85,0,0,.85);
+    text-decoration:none;
+    cursor:pointer;
+  }
+  .hell.lit{animation:hell-pulse 2.8s ease-in-out infinite, hell-flicker 7s linear infinite}
+  @keyframes hell-pulse{
+    0%,100%{
+      text-shadow:
+        0 0 3px rgba(175,0,0,.85),
+        0 0 14px rgba(150,0,0,.9),
+        0 0 40px rgba(120,0,0,.9),
+        0 0 95px rgba(85,0,0,.85);
+    }
+    50%{
+      text-shadow:
+        0 0 4px rgba(200,10,10,.95),
+        0 0 20px rgba(165,0,0,1),
+        0 0 55px rgba(135,0,0,1),
+        0 0 120px rgba(95,0,0,.95);
+    }
+  }
+  @keyframes hell-flicker{
+    0%,42%,44%,46%,78%,80.5%,100%{opacity:1}
+    43%,45%,47%,79%,81.5%{opacity:.4}
+  }
+  .hell:hover{filter:brightness(1.35)}
+  .hell:focus-visible{outline:none;filter:brightness(1.35)}
+
+  /* زرار Hell Here أحمر سوليد زي Gallery */
+  .click{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;
+    padding:14px 44px;border-radius:999px;
+    border:1px solid #c02a1d;
+    background:#a51414;
+    color:#fff;
+    font-size:clamp(11px, 1.15vw, 14px);font-weight:700;
+    letter-spacing:.34em;text-transform:uppercase;
+    text-decoration:none;cursor:pointer;
+    box-shadow:0 12px 24px -14px rgba(0,0,0,.9);
+    transition:background .25s, color .25s, border-color .25s, box-shadow .25s;
+  }
+  .click:hover, .click:focus-visible{
+    background:#fff;
+    color:#7c0b0b;
+    border-color:#fff;
+    box-shadow:0 12px 24px -14px rgba(0,0,0,.9);
+    outline:none;
+  }
+  .click > .txt{position:relative;z-index:1}
+
+  /* وميض أحمر لحظة الدخول */
+  .flash{
+    position:fixed;inset:0;pointer-events:none;z-index:5;opacity:0;
+    background:radial-gradient(58% 48% at 50% 46%,
+      rgba(205,45,45,.9), rgba(125,0,0,.8) 42%, rgba(30,0,0,.96) 100%);
+  }
+
+  /* حركة الدخول: تقريب في الصورة ثم ظلمة */
+  body.opening .stage{transform:scale(3.2);filter:brightness(.22) saturate(1.35)}
+  body.opening .hell{animation:none;opacity:0;transition:opacity .25s}
+  body.opening .click{opacity:0;transition:opacity .25s}
+  body.opening .flash{animation:flash .95s ease-out forwards}
+  @keyframes flash{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
+
+  @media (prefers-reduced-motion: reduce){
+    .hell.lit{animation:none}
+    .sparks i{animation:none;opacity:0}
+  }
+</style>
+</head>
+<body>
+  <main class="stage" id="stage">
+    <img class="scene" src="assets/demon.jpg" alt="The horned woman standing in the mist" />
+    <div class="tint" aria-hidden="true"></div>
+    <div class="sparks" id="sparks" aria-hidden="true"></div>
+
+    <div class="hero">
+      <!-- HELL بتتكتب حرف حرف وبعدها بتنوّر، والدوس عليها بيدخّل -->
+      <a class="hell" id="hellLink" href="inside.html" aria-label="Enter HELL">
+        <span id="hellTxt"></span>
+      </a>
+
+      <!-- زرار الدخول -->
+      <a class="click" id="clickBtn" href="inside.html" aria-label="Hell Here — enter">
+        <span class="txt">Hell Here</span>
+      </a>
+    </div>
+  </main>
+
+  <div class="flash"></div>
+
+<script>
+  // منع كليك يمين على الصفحة
+  document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  // كتابة HELL حرف حرف بخط الميتال، وبعدها النيون يفضل شغال
+  const hellLink = document.getElementById('hellLink');
+  const hellTxt = document.getElementById('hellTxt');
+  const WORD = 'HELL';
+  function typeHell(){
+    let i = 0;
+    const t = setInterval(() => {
+      hellTxt.textContent = WORD.slice(0, ++i);
+      if (i >= WORD.length){
+        clearInterval(t);
+        hellLink.classList.add('lit');
+      }
+    }, 420);
+  }
+  // نتأكد إن خط الميتال اتحمّل قبل ما الكتابة تبدأ
+  const fontsReady = (document.fonts && document.fonts.load)
+    ? document.fonts.load('60px "Horror Vision"', 'HELL')
+        .catch(() => {})
+        .then(() => document.fonts.ready)
+    : Promise.resolve();
+  fontsReady.then(() => setTimeout(typeHell, 400));
+
+  // نقط النيون على الصورة: بتطلع من تحت لفوق زي التلج
+  const sparks = document.getElementById('sparks');
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    for (let i = 0; i < 70; i++){
+      const dot = document.createElement('i');
+      const size = (1.6 + Math.random() * 2.4).toFixed(1);
+      dot.style.left = (Math.random() * 100).toFixed(2) + '%';
+      dot.style.width = size + 'px';
+      dot.style.height = size + 'px';
+      dot.style.animationDuration = (8 + Math.random() * 8).toFixed(2) + 's';
+      dot.style.animationDelay = (-Math.random() * 16).toFixed(2) + 's';
+      dot.style.setProperty('--dx', (Math.random() * 72 - 36).toFixed(0) + 'px');
+      dot.style.opacity = (0.35 + Math.random() * 0.5).toFixed(2);
+      sparks.appendChild(dot);
+    }
+  }
+
+  // الدخول للصفحة التانية بحركة التقريب
+  document.querySelectorAll('.hell, .click').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (document.body.classList.contains('opening')) return;
+      document.body.classList.add('opening');
+      setTimeout(() => { location.href = el.getAttribute('href'); }, 900);
+    });
+  });
+
+  // لو رجع من المتصفح (back) الصفحة ترجع طبيعية مش واقفة على حركة الدخول
+  addEventListener('pageshow', () => document.body.classList.remove('opening'));
+</script>
+</body>
+</html>
