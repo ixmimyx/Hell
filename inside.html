@@ -95,11 +95,11 @@
     100%{transform:translate(var(--dx,20px), -110vh) scale(1.05);opacity:0}
   }
 
-  /* أزرار ثابتة فوق بحجم مقروء على أي شاشة */
+  /* أزرار ثابتة تحت في آخر الصفحة بحجم مقروء على أي شاشة */
   .topbar{
-    position:fixed;top:0;left:0;right:0;z-index:20;
+    position:fixed;left:0;right:0;bottom:0;top:auto;z-index:20;
     display:flex;align-items:center;justify-content:space-between;gap:12px;
-    padding:14px 18px;
+    padding:14px 18px calc(14px + env(safe-area-inset-bottom, 0px));
     pointer-events:none;
   }
   .topbar > *{pointer-events:auto}
@@ -556,9 +556,12 @@
      وبيتوسّط في المساحة اللي تحت كلمة HELL */
   const card = document.getElementById('card');
   const intro = document.getElementById('intro');
+  const topbar = document.querySelector('.topbar');
   function fit(){
     const topSpace = intro.getBoundingClientRect().bottom + 16;
-    const avail = innerHeight - topSpace - 24;
+    // نسيب مساحة الشريط اللي تحت عشان ما يداراش على الكارت
+    const barSpace = topbar ? topbar.offsetHeight + 10 : 48;
+    const avail = innerHeight - topSpace - 24 - barSpace;
     const s = Math.min(
       (innerWidth - 28) / 1000,
       avail / card.offsetHeight
